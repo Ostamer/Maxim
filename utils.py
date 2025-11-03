@@ -1,8 +1,9 @@
 import requests
 from loguru import logger
 
-BASE_URL = "https://collectionapi.metmuseum.org/public/collection/v1"
-logger.add("api_tests.log")
+from config import BASE_URL, LOG_FILE
+
+logger.add(LOG_FILE)
 
 
 def get_artwork_by_id(object_id: int):
