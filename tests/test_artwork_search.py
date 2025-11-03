@@ -1,10 +1,11 @@
+from config import VALID_QUERY_PARAM, INVALID_QUERY_PARAM
 from models import ArtworkList
 from utils import search_artworks_with_query
 
 
 # Тест получения существующего произведения искусства по ключевому слову
 def test_search_artworks_by_valid_query():
-    response = search_artworks_with_query("Scream")
+    response = search_artworks_with_query(VALID_QUERY_PARAM)
     assert response.status_code == 200
     data = response.json()
 
@@ -18,7 +19,7 @@ def test_search_artworks_by_valid_query():
 
 # Тест получения несуществующего произведения искусства по ключевому слову
 def test_search_artworks_by_invalid_query():
-    response = search_artworks_with_query("Anigilation")
+    response = search_artworks_with_query(INVALID_QUERY_PARAM)
     assert response.status_code == 200
     data = response.json()
 
