@@ -1,4 +1,5 @@
 from config import VALID_QUERY_PARAM_WITH_FILTER, VALID_QUERY_PARAM
+from constants import ASSERT_MESSAGES
 from models import Artwork, ArtworkList
 from utils import get_artwork_by_id, search_artworks_with_query
 
@@ -6,7 +7,9 @@ from utils import get_artwork_by_id, search_artworks_with_query
 # Тест получения существующих произведений искусств по ключевому слову с филтрацией
 def test_search_artworks_by_query_with_filters():
     response = search_artworks_with_query(VALID_QUERY_PARAM_WITH_FILTER)
-    assert response.status_code == 200
+    assert response.status_code == 200, ASSERT_MESSAGES["status_200"].format(
+        status=response.status_code
+    )
     data = response.json()
     if data.get("objectIDs") is None:
         data["objectIDs"] = []
@@ -15,10 +18,16 @@ def test_search_artworks_by_query_with_filters():
 
     for object_id in artwork_list.objectIDs:
         resp = get_artwork_by_id(object_id)
-        assert resp.status_code == 200
+        assert resp.status_code == 200, ASSERT_MESSAGES["status_200"].format(
+            status=resp.status_code
+        )
         artwork_data = resp.json()
         artwork = Artwork(**artwork_data)
-        assert artwork.isHighlight is True
+        assert artwork.isHighlight is True, (
+            ASSERT_MESSAGES["check_field_isHighLight"].format(
+                isHighLight=artwork.isHighlight
+            )
+        )
 
 
 # Тест ограничения на количество возвращаемых результатов
@@ -30,4 +39,8 @@ def test_search_results_limit():
         data["objectIDs"] = []
 
     artwork_list = ArtworkList(**data)
-    assert len(artwork_list.objectIDs) <= artwork_list.total
+    assert len(artwork_list.objectIDs) <= artwork_list.total, (
+        ASSERT_MESSAGES["objectIDs_less_or_equal_total"].format(
+            count=len(artwork_list.objectIDs), total=artwork_list.total
+        )
+    )
