@@ -1,7 +1,13 @@
+import os
+from dotenv import load_dotenv
 import requests
 from loguru import logger
 
-from config import BASE_URL, LOG_FILE
+# Загружаем переменные окружения из .env
+load_dotenv()
+
+BASE_URL = os.getenv("BASE_URL")
+LOG_FILE = os.getenv("LOG_FILE")
 
 logger.add(LOG_FILE)
 
